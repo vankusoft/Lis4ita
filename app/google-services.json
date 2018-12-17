@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "221002870099",
+    "firebase_url": "https://lis4ita-649b1.firebaseio.com",
+    "project_id": "lis4ita-649b1",
+    "storage_bucket": "lis4ita-649b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221002870099:android:893f9fbc87a4f2e9",
+        "android_client_info": {
+          "package_name": "com.example.ivgeorgiev.lis4ita"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221002870099-hol0bh8g152s4vvobj8r8g4ur2chsoon.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH9yCWaDLJvONGTFJxfg0MBhRwdxSmXRc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
