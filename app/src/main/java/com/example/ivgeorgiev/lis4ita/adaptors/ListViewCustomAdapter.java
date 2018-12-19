@@ -1,4 +1,4 @@
-package com.example.ivgeorgiev.lis4ita;
+package com.example.ivgeorgiev.lis4ita.adaptors;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,15 +7,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.ivgeorgiev.lis4ita.R;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewCustomAdapter extends BaseAdapter {
 
-    List<String> players;
+    List<ArrayList<String>> players;
     Context context;
     int layout;
 
-    public ListViewCustomAdapter(List<String> players, Context context, int layout) {
+    public ListViewCustomAdapter(List<ArrayList<String>> players, Context context, int layout) {
         this.players=players;
         this.context=context;
         this.layout=layout;
@@ -46,9 +49,16 @@ public class ListViewCustomAdapter extends BaseAdapter {
 
             TextView playersTextView=convertView.findViewById(R.id.cardViewPlayerText);
 
-            playersTextView.setText(players.get(position));
-        }
+            ArrayList<String> teamPlayers=players.get(position);
 
+            String playersText="";
+
+            for(int i=0;i<teamPlayers.size();i++){
+                playersText= playersText + teamPlayers.get(i)+ "\n";
+            }
+
+            playersTextView.setText(playersText);
+        }
 
         return convertView;
     }

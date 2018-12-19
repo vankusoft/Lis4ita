@@ -1,4 +1,4 @@
-package com.example.ivgeorgiev.lis4ita;
+package com.example.ivgeorgiev.lis4ita.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.example.ivgeorgiev.lis4ita.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -20,12 +20,21 @@ public class GameSettings extends AppCompatActivity implements AdapterView.OnIte
 
     DatabaseReference databaseReference;
 
+    String game_room=" ";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_settings);
 
-        databaseReference=FirebaseDatabase.getInstance().getReference().child("game_settings");
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            game_room = extras.getString("game_room");
+        }
+
+        if(!game_room.contentEquals(" ")){
+            databaseReference=FirebaseDatabase.getInstance().getReference().child("game_room").child(game_room).child("game_settings");
+        }
 
         init();
     }
@@ -91,8 +100,9 @@ public class GameSettings extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void applySettingsBtn(View view) {
-
         Intent intent=new Intent(GameSettings.this,FetchUsers.class);
+        intent.putExtra("game_room",game_room);
+        intent.putExtra("start_game","true");
         startActivity(intent);
     }
 }

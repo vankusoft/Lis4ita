@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:padding="15dp">
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="casual"
+    android:text="You already have game room?"
+    android:textAlignment="center"
+    android:textSize="35dp"
+    android:layout_marginTop="60dp"/>
+
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Type the name of the game room."
+    android:layout_marginTop="170dp"
+    android:id="@+id/enterGameRoomET"/>
+
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="JOIN"
+    android:id="@+id/gameRoomEnterBtn"
+    android:onClick="enterGameRoomBtn"/>
+
+</LinearLayout>

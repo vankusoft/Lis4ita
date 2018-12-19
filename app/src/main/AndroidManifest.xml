@@ -11,25 +11,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
-        <activity android:name=".FetchUsers" />
-        <activity android:name=".GameSettings" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.FetchUsers" />
+        <activity android:name=".activities.GameSettings" />
+
+        <activity android:name=".activities.loginRegister.RegisterActivity">
+             <intent-filter>
+                 <action android:name="android.intent.action.VIEW" />
+             </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.loginRegister.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SubmitWords" />
-        <activity android:name=".InGameActivity" />
 
-        <service android:name=".BackgroundServices" />
+        <activity android:name=".activities.SubmitWords" />
 
-        <service android:name=".TeamsBackgroundService" />
+        <activity android:name=".activities.InGameActivity" />
 
-        <activity android:name=".TeamMembersActivity"></activity>
+        <activity android:name=".activities.TeamMembersActivity"/>
+
+
+        <service android:name=".backgroundServices.BackgroundServices" />
+
+        <service android:name=".backgroundServices.InGameBackgroundService"/>
+
+        <service android:name=".backgroundServices.TeamsBackgroundService" />
+
     </application>
 
 </manifest>

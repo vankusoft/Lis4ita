@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TeamMembersActivity">
+    tools:context=".activities.TeamMembersActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:id="@+id/playersListView"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10.0dp">
+        android:dividerHeight="10.0dp"
+        android:layout_weight="0.9">
     </ListView>
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="PROCEED"
+        android:layout_weight="0.1"
+        android:id="@+id/proceedBtn"
+        android:onClick="proceedBtnOnClick"/>
+
+</LinearLayout>

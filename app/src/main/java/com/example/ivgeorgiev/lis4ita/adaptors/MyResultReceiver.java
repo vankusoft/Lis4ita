@@ -1,4 +1,4 @@
-package com.example.ivgeorgiev.lis4ita;
+package com.example.ivgeorgiev.lis4ita.adaptors;
 
 import android.os.Bundle;
 import android.os.Handler;
