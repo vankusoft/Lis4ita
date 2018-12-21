@@ -68,7 +68,7 @@ public class TeamMembersActivity extends AppCompatActivity {
                     Iterator<DataSnapshot> playersIterator = playersIterable.iterator();
 
                     while (playersIterator.hasNext()) {
-                        list.add(playersIterator.next().getValue().toString());
+                        list.add(playersIterator.next().child("nick_name").getValue().toString());
                     }
 
                     ++index;

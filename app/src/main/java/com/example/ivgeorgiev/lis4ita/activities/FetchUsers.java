@@ -16,6 +16,7 @@ import com.example.ivgeorgiev.lis4ita.adaptors.MyResultReceiver;
 import com.example.ivgeorgiev.lis4ita.R;
 import com.example.ivgeorgiev.lis4ita.backgroundServices.BackgroundServices;
 import com.example.ivgeorgiev.lis4ita.backgroundServices.TeamsBackgroundService;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,9 +29,10 @@ import java.util.List;
 public class FetchUsers extends AppCompatActivity implements MyResultReceiver.Receiver {
 
     ListView listView;
-    Button startGameButton;
+    Button settingsButton;
 
     DatabaseReference data;
+    FirebaseAuth auth;
 
     ArrayAdapter<String> arrayAdapter;
     List<String> userList;
@@ -40,7 +42,7 @@ public class FetchUsers extends AppCompatActivity implements MyResultReceiver.Re
     ProgressDialog dialog;
 
     String game_room = " ";
-    String startGame = "false";
+    boolean settings = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,28 +53,56 @@ public class FetchUsers extends AppCompatActivity implements MyResultReceiver.Re
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             game_room = extras.getString("game_room");
-
-            if (extras.getString("start_game") != null) {
-                startGame = extras.getString("start_game");
-            }
         }
 
         data = FirebaseDatabase.getInstance().getReference();
-
-        init();
+        auth = FirebaseAuth.getInstance();
 
         myResultReceiver = new MyResultReceiver(new Handler());
         myResultReceiver.setReceiver(this);
 
         getUsersFromDatabase();
+
+        init();
+
+        settingsButtonAvailability();
+    }
+
+    private void settingsButtonAvailability() {
+
+        if (auth.getCurrentUser() != null) {
+
+            final String user_id = auth.getCurrentUser().getUid();
+
+            final DatabaseReference databaseReference = data.child("game_room").child(game_room);
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String admin_id = dataSnapshot.child("admin").getValue().toString();
+
+                    if (user_id.contentEquals(admin_id)) {
+                        settings = true;
+                    }
+
+                    if (!settings) {
+                        settingsButton.setEnabled(false);
+                    } else {
+                        settingsButton.setEnabled(true);
+                    }
+
+                    databaseReference.removeEventListener(this);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     private void init() {
-        startGameButton = findViewById(R.id.startGameButton);
-        if (startGame.contentEquals("false")) {
-            startGameButton.setEnabled(false);
-        }
-
+        settingsButton = findViewById(R.id.settingsGameButton);
         listView = findViewById(R.id.usersList);
         userList = new ArrayList<>();
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userList);
@@ -137,13 +167,31 @@ public class FetchUsers extends AppCompatActivity implements MyResultReceiver.Re
     }
 
     public void startGameOnClick(View view) {
-        dialog = ProgressDialog.show(FetchUsers.this, "Loading", "Please wait...", true);
 
-        //Background operation of getting players_number from game_settings
-        Intent intentService = new Intent(FetchUsers.this, BackgroundServices.class);
-        intentService.putExtra("receiverTag", myResultReceiver);
-        intentService.putExtra("game_room", game_room);
-        startService(intentService);
+        final DatabaseReference databaseReference=data.child("game_room").child(game_room);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child("game_settings").exists()){
+                    dialog = ProgressDialog.show(FetchUsers.this, "Loading", "Please wait...", true);
+
+                    //Background operation of getting players_number from game_settings
+                    Intent intentService = new Intent(FetchUsers.this, BackgroundServices.class);
+                    intentService.putExtra("receiverTag", myResultReceiver);
+                    intentService.putExtra("game_room", game_room);
+                    startService(intentService);
+                }else{
+                    Toast.makeText(FetchUsers.this,"There are not game options selected yet!", Toast.LENGTH_SHORT).show();
+                }
+
+                databaseReference.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void settingsGameOnClick(View view) {

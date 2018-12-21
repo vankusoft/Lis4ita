@@ -96,6 +96,10 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(loginIntent);
 
                         database.removeEventListener(this);
+                    }else{
+
+                        dialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "Something went wrong.", Toast.LENGTH_SHORT).show();
                     }
                 }
 

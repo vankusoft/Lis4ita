@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import com.example.ivgeorgiev.lis4ita.handlers.Player;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,7 +18,7 @@ import java.util.Random;
 public class TeamsBackgroundService extends IntentService {
 
     DatabaseReference data;
-    List<String> userList;
+    List<Player> userList;
     Random random;
 
     public TeamsBackgroundService() {
@@ -51,7 +52,7 @@ public class TeamsBackgroundService extends IntentService {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    userList.add(data.child("nick_name").getValue().toString());
+                    userList.add(new Player(data.getKey(),data.child("nick_name").getValue().toString()));
                 }
 
                 gameRoomDB.removeEventListener(this);
@@ -82,7 +83,15 @@ public class TeamsBackgroundService extends IntentService {
                     int rann = random.nextInt(5000000);
                     String childRandomString = String.valueOf(rann);
 
-                    dbTeams.child("team" + i).child(childRandomString).setValue(userList.get(i - 1));
+                    Player player=userList.get(i-1);
+
+                    dbTeams.child("team" + i).child(childRandomString).child("nick_name").setValue(player.getNick_name());
+                    dbTeams.child("team" + i).child(childRandomString).child("id").setValue(player.getId());
+
+                    dbTeams.child("team" + i).child(childRandomString).child("is_talking").setValue("false");
+                    dbTeams.child("team" + i).child(childRandomString).child("already_talked").setValue("false");
+                    dbTeams.child("team" + i).child(childRandomString).child("pass_before_timer").setValue("false");
+                    dbTeams.child("team" + i).child(childRandomString).child("pass_after_timer").setValue("false");
                 }
 
                 if (userList.size() > teams) {
@@ -95,7 +104,15 @@ public class TeamsBackgroundService extends IntentService {
                         int rann = random.nextInt(5000000);
                         String childRandomString = String.valueOf(rann);
 
-                        dbTeams.child("team" + team_index).child(childRandomString).setValue(userList.get(playerIndex));
+                        Player player=userList.get(playerIndex);
+
+                        dbTeams.child("team" + team_index).child(childRandomString).child("nick_name").setValue(player.getNick_name());
+                        dbTeams.child("team" + team_index).child(childRandomString).child("id").setValue(player.getId());
+
+                        dbTeams.child("team" + team_index).child(childRandomString).child("is_talking").setValue("false");
+                        dbTeams.child("team" + team_index).child(childRandomString).child("already_talked").setValue("false");
+                        dbTeams.child("team" + team_index).child(childRandomString).child("pass_before_timer").setValue("false");
+                        dbTeams.child("team" + team_index).child(childRandomString).child("pass_after_timer").setValue("false");
 
                         if (team_index == teams)
                             team_index = 1;
