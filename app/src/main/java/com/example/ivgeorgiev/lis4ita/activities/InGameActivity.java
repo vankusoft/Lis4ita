@@ -154,6 +154,7 @@ public class InGameActivity extends AppCompatActivity implements Receiver {
         if (user_id.contentEquals(id)) {
             inGameNextBtn.setEnabled(false);
             setViewPager();
+            sliderChanging();
         }
 
         dialog.dismiss();
@@ -219,6 +220,21 @@ public class InGameActivity extends AppCompatActivity implements Receiver {
                 }
             });
         }
+    }
+
+    private void sliderChanging(){
+
+        databaseReference.child("word_index").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                viewPager.setCurrentItem(item_position);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void passWordBtn(View view) {

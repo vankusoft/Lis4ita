@@ -71,59 +71,74 @@ public class TeamsBackgroundService extends IntentService {
 
         final DatabaseReference dbTeams = data.child("game_room").child(game_room).child("teams");
 
-        gameSettings.addValueEventListener(new ValueEventListener() {
+        dbTeams.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String teams_number = dataSnapshot.child("teams_number").getValue().toString();
-                int teams = Integer.parseInt(teams_number);
+                if(!dataSnapshot.exists()){
+                    gameSettings.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (int i = 1; i <= teams; i++) {
+                            String teams_number = dataSnapshot.child("teams_number").getValue().toString();
+                            int teams = Integer.parseInt(teams_number);
 
-                    int rann = random.nextInt(5000000);
-                    String childRandomString = String.valueOf(rann);
+                            for (int i = 1; i <= teams; i++) {
 
-                    Player player=userList.get(i-1);
+                                int rann = random.nextInt(5000000);
+                                String childRandomString = String.valueOf(rann);
 
-                    dbTeams.child("team" + i).child(childRandomString).child("nick_name").setValue(player.getNick_name());
-                    dbTeams.child("team" + i).child(childRandomString).child("id").setValue(player.getId());
+                                Player player=userList.get(i-1);
 
-                    dbTeams.child("team" + i).child(childRandomString).child("is_talking").setValue("false");
-                    dbTeams.child("team" + i).child(childRandomString).child("already_talked").setValue("false");
-                    dbTeams.child("team" + i).child(childRandomString).child("pass_before_timer").setValue("false");
-                    dbTeams.child("team" + i).child(childRandomString).child("pass_after_timer").setValue("false");
+                                dbTeams.child("team" + i).child(childRandomString).child("nick_name").setValue(player.getNick_name());
+                                dbTeams.child("team" + i).child(childRandomString).child("id").setValue(player.getId());
+
+                                dbTeams.child("team" + i).child(childRandomString).child("is_talking").setValue("false");
+                                dbTeams.child("team" + i).child(childRandomString).child("already_talked").setValue("false");
+                                dbTeams.child("team" + i).child(childRandomString).child("pass_before_timer").setValue("false");
+                                dbTeams.child("team" + i).child(childRandomString).child("pass_after_timer").setValue("false");
+                            }
+
+                            if (userList.size() > teams) {
+
+                                int team_index = 1;
+                                int playerIndex = teams;
+
+                                while (playerIndex < userList.size()) {
+
+                                    int rann = random.nextInt(5000000);
+                                    String childRandomString = String.valueOf(rann);
+
+                                    Player player=userList.get(playerIndex);
+
+                                    dbTeams.child("team" + team_index).child(childRandomString).child("nick_name").setValue(player.getNick_name());
+                                    dbTeams.child("team" + team_index).child(childRandomString).child("id").setValue(player.getId());
+
+                                    dbTeams.child("team" + team_index).child(childRandomString).child("is_talking").setValue("false");
+                                    dbTeams.child("team" + team_index).child(childRandomString).child("already_talked").setValue("false");
+                                    dbTeams.child("team" + team_index).child(childRandomString).child("pass_before_timer").setValue("false");
+                                    dbTeams.child("team" + team_index).child(childRandomString).child("pass_after_timer").setValue("false");
+
+                                    if (team_index == teams)
+                                        team_index = 1;
+                                    else
+                                        ++team_index;
+
+                                    ++playerIndex;
+                                }
+                            }
+
+                            gameSettings.removeEventListener(this);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
-                if (userList.size() > teams) {
-
-                    int team_index = 1;
-                    int playerIndex = teams;
-
-                    while (playerIndex < userList.size()) {
-
-                        int rann = random.nextInt(5000000);
-                        String childRandomString = String.valueOf(rann);
-
-                        Player player=userList.get(playerIndex);
-
-                        dbTeams.child("team" + team_index).child(childRandomString).child("nick_name").setValue(player.getNick_name());
-                        dbTeams.child("team" + team_index).child(childRandomString).child("id").setValue(player.getId());
-
-                        dbTeams.child("team" + team_index).child(childRandomString).child("is_talking").setValue("false");
-                        dbTeams.child("team" + team_index).child(childRandomString).child("already_talked").setValue("false");
-                        dbTeams.child("team" + team_index).child(childRandomString).child("pass_before_timer").setValue("false");
-                        dbTeams.child("team" + team_index).child(childRandomString).child("pass_after_timer").setValue("false");
-
-                        if (team_index == teams)
-                            team_index = 1;
-                        else
-                            ++team_index;
-
-                        ++playerIndex;
-                    }
-                }
-
-                gameSettings.removeEventListener(this);
+                dbTeams.removeEventListener(this);
             }
 
             @Override
@@ -131,5 +146,6 @@ public class TeamsBackgroundService extends IntentService {
 
             }
         });
+        
     }
 }
