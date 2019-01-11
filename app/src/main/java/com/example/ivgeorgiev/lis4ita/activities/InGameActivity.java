@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ivgeorgiev.lis4ita.R;
@@ -35,6 +36,7 @@ public class InGameActivity extends AppCompatActivity implements Receiver {
 
     Button inGameNextBtn;
     ProgressDialog dialog;
+    TextView timerTextView;
 
     ArrayList<String> list;
 
@@ -84,6 +86,8 @@ public class InGameActivity extends AppCompatActivity implements Receiver {
 
         teamsList = new ArrayList<>();
         temporaryKeys = new ArrayList<>();
+
+        timerTextView=findViewById(R.id.timerTV);
     }
 
     //TEAM ORDERING BEGINS FROM HERE

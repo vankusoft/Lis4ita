@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         setUpDialogWindow();
 
-        setUpDialogWindow();
+        //setUpDialogWindow();
 
         greetUser();
     }
